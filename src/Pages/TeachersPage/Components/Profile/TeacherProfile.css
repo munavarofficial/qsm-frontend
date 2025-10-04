@@ -1,0 +1,36 @@
+.teacher-profile-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.76) 0px 4px 8px;
+    border: 1px solid #ffffff;
+}
+
+.teacher-profile-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-transform: capitalize;
+    color: #ffffff;
+}
+
+.teacher-profile-image {
+    max-width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.7) 0px 4px 8px;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 10px;
+}
+
+.card-header {
+    background: linear-gradient(90deg, #28a745, #218838);
+}
+
+.card-footer {
+    border-top: 1px solid #dddddd;
+}

@@ -1,0 +1,16 @@
+.notification-text {
+    font-size: 0.875rem; /* Smaller size */
+    color: #6c757d; /* Muted color for better readability */
+  }
+  
+  .notification-date,
+  .notification-time {
+    font-size: 0.75rem; /* Even smaller */
+    color: #6c757d;
+  }
+  
+  .notification-title {
+    font-size: 1rem; /* Slightly smaller title */
+    font-weight: bold;
+  }
+  
