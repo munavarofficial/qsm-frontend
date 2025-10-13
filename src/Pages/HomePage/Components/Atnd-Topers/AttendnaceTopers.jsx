@@ -42,8 +42,8 @@ function AttendnaceTopers() {
               {topers.length > 0 ? (
                 topers.map((student, index) => (
                   <tr key={index} className="border-b hover:bg-gray-100">
-                    <td className="p-3 text-sm sm:text-base">{student.name}</td>
-                    <td className="p-3 text-sm sm:text-base">
+                    <td className="p-3 text-sm md:text-base font-semibold">{student.name}</td>
+                    <td className="p-3 text-sm md:text-base">
                       {student.father_name}
                     </td>
                     <td className="p-3 text-sm sm:text-base">

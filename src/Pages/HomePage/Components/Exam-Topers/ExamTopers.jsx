@@ -3,7 +3,7 @@ import axios from "axios";
 
 function ExamTopers() {
   const [topers, setTopers] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -16,14 +16,13 @@ function ExamTopers() {
     } catch (error) {
       console.error("Failed to fetch exam toppers:", error);
     } finally {
-      setLoading(false); // Set loading to false after fetch attempt
+      setLoading(false);
     }
   }, [backendUrl]);
 
   useEffect(() => {
     fetchTopers();
   }, [fetchTopers]);
-
 
   return (
     <div className="">
@@ -32,65 +31,92 @@ function ExamTopers() {
       </h3>
 
       {loading ? (
-        <p>Loading...</p> // Show a loading message while fetching data
+        <p>Loading...</p>
       ) : topers.length === 0 ? (
-        <p className="text-gray-500">Exam Topers will update soon</p> // Show message if no toppers available
+        <p className="text-gray-500 text-center">Exam Toppers will update soon</p>
       ) : (
-        // Grid Container
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {topers.map((group, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg shadow-md p-2 flex flex-col space-y-2"
-            >
-              {/* Grade Title */}
-              <h4 className="text-sm md:text-lg font-semibold text-gray-500">{`Class ${group.std}`}</h4>
-              <div className="overflow-x-auto">
-                {/* Toppers Table */}
-                <table className="min-w-full text-left text-sm">
-                  <thead className="items-center p-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl transition-all duration-200 text-xs sm:text-sm">
-                    <tr>
-                      <th className="p-2">Name</th>
-                      <th className="p-2">Parent</th>
-                      <th className="p-2">Marks</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* First Topper */}
-                    <tr className="border-b hover:bg-gray-100 transition duration-200">
+        <>
+          {/* ✅ Horizontal scroll on mobile */}
+          <div className="flex md:hidden overflow-x-auto space-x-1 pb-3">
+            {topers.map((group, index) => (
+              <div
+                key={index}
+                className="min-w-[85%] bg-white rounded-lg shadow-md p-3 flex-shrink-0"
+              >
+                {/* Class Title */}
+                <h4 className="text-sm md:text-lg font-semibold text-gray-600 mb-2">
+                  Class {group.class}
+                </h4>
 
-                      <td className="p-2">{group.first_name}</td>
-                      <td className="p-2">{group.first_father_name}</td>
-                      <td className="p-2 text-green-700 font-semibold">
-                        {group.first_score}
-                      </td>
-                    </tr>
-
-                    {/* Second Topper */}
-                    <tr className="border-b hover:bg-gray-100 transition duration-200">
-
-                      <td className="p-2">{group.second_name}</td>
-                      <td className="p-2">{group.second_father_name}</td>
-                      <td className="p-2 text-green-700 font-semibold">
-                        {group.second_score}
-                      </td>
-                    </tr>
-
-                    {/* Third Topper */}
-                    <tr className="border-b hover:bg-gray-100 transition duration-200">
-                      
-                      <td className="p-2">{group.third_name}</td>
-                      <td className="p-2">{group.third_father_name}</td>
-                      <td className="p-2 text-green-700 font-semibold">
-                        {group.third_score}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                {/* Table */}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded text-xs sm:text-sm">
+                      <tr>
+                        <th className="p-2">Name</th>
+                        <th className="p-2">Parent</th>
+                        <th className="p-2">Marks</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {group.top_scorers.map((student, i) => (
+                        <tr
+                          key={i}
+                          className="border-b hover:bg-gray-100 transition duration-200"
+                        >
+                          <td className="p-2">{student.student_name}</td>
+                          <td className="p-2">{student.father_name}</td>
+                          <td className="p-2 text-green-700 font-semibold">
+                            {student.total_marks}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          {/* ✅ Grid layout on larger screens */}
+          <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-4">
+            {topers.map((group, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-md p-3 flex flex-col space-y-2"
+              >
+                <h4 className="text-sm md:text-lg font-semibold text-gray-600">
+                  Class {group.class}
+                </h4>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded text-xs sm:text-sm">
+                      <tr>
+                        <th className="p-2">Name</th>
+                        <th className="p-2">Parent</th>
+                        <th className="p-2">Marks</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {group.top_scorers.map((student, i) => (
+                        <tr
+                          key={i}
+                          className="border-b hover:bg-gray-100 transition duration-200"
+                        >
+                          <td className="p-2 font-semibold">{student.student_name}</td>
+                          <td className="p-2">{student.father_name}</td>
+                          <td className="p-2 text-green-700 font-semibold">
+                            {student.total_marks}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

@@ -21,9 +21,8 @@ function CheckStdProgrTCH() {
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState([]);
 
-  const [selectedYear, setSelectedYear] = useState(
-    new Date().getFullYear().toString()
-  );
+  const [selectedTermYear, setSelectedTermYear] = useState("");
+  const [availableTermYears, setAvailableTermYears] = useState([]);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -38,31 +37,85 @@ function CheckStdProgrTCH() {
   }, [teacherDetails]);
 
   const fetchStudentProgress = useCallback(
-    async (studentId, year) => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${backendUrl}/api/teachers/get-student-progress/${studentId}/`,
-          {
-            params: { year },
-            withCredentials: true,
-          }
-        );
-        setStudentProgress(response.data.progress || []);
-      } catch (error) {
-        console.error("Error fetching student progress:", error);
-      } finally {
-        setLoading(false);
+  async (studentId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${backendUrl}/api/teachers/get-student-progress/${studentId}/`,
+        {
+          withCredentials: true,
+        }
+      );
+      const progressData = response.data.progress || [];
+      setStudentProgress(progressData);
+
+      // Extract unique term-year combinations and sort them
+      const termYears = extractTermYears(progressData);
+      setAvailableTermYears(termYears);
+
+      // Set default to the latest term in current year, or latest overall
+      if (termYears.length > 0) {
+        setSelectedTermYear(termYears[0].value);
       }
-    },
-    [backendUrl]
-  );
+    } catch (error) {
+      console.error("Error fetching student progress:", error);
+      setStudentProgress([]);
+      setAvailableTermYears([]);
+    } finally {
+      setLoading(false);
+    }
+  },
+  [backendUrl] // Remove backendUrl from dependencies
+);
+
+  const extractTermYears = (progressData) => {
+    const termYearMap = new Map();
+
+    progressData.forEach(record => {
+      const key = `${record.term}-${record.year}`;
+      if (!termYearMap.has(key)) {
+        termYearMap.set(key, {
+          term: record.term,
+          year: record.year,
+          timestamp: new Date(record.year, getTermOrder(record.term))
+        });
+      }
+    });
+
+    // Convert to array and sort by year and term order (latest first)
+    return Array.from(termYearMap.values())
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .map(item => ({
+        label: `${item.term} ${item.year}`,
+        value: `${item.term}-${item.year}`,
+        term: item.term,
+        year: item.year
+      }));
+  };
+
+  const getTermOrder = (term) => {
+    const termOrder = {
+      'first term': 0,
+      'second term': 1,
+      'third term': 2
+    };
+    return termOrder[term.toLowerCase()] || 0;
+  };
+
+  const getFilteredProgress = () => {
+    if (!selectedTermYear) return studentProgress;
+
+    const [selectedTerm, selectedYear] = selectedTermYear.split('-');
+    return studentProgress.filter(
+      record => record.term === selectedTerm && record.year.toString() === selectedYear
+    );
+  };
 
   useEffect(() => {
     if (selectedStudent) {
-      fetchStudentProgress(selectedStudent.id, selectedYear);
+      fetchStudentProgress(selectedStudent.id);
     }
-  }, [selectedStudent, selectedYear, fetchStudentProgress]);
+  }, [selectedStudent, fetchStudentProgress]);
 
   const fetchClassStudents = async (classId) => {
     try {
@@ -85,6 +138,8 @@ function CheckStdProgrTCH() {
     setSelectedClass(classData);
     setSelectedStudent(null);
     setStudentProgress([]);
+    setAvailableTermYears([]);
+    setSelectedTermYear("");
     fetchClassStudents(classData.class_id);
   };
 
@@ -92,20 +147,24 @@ function CheckStdProgrTCH() {
     setSelectedStudent(studentData);
   };
 
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value);
+  const handleTermYearChange = (e) => {
+    setSelectedTermYear(e.target.value);
   };
 
   const handleBack = () => {
     if (selectedStudent) {
       setSelectedStudent(null);
       setStudentProgress([]);
+      setAvailableTermYears([]);
+      setSelectedTermYear("");
     } else if (selectedClass) {
       setSelectedClass(null);
       setStudents([]);
     }
   };
-const getImageUrl = (url) => (url?.startsWith("http") ? url : `${backendUrl}${url}`);
+
+  const getImageUrl = (url) => (url?.startsWith("http") ? url : `${backendUrl}${url}`);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-1">
       <div className="max-w-7xl mx-auto">
@@ -251,31 +310,24 @@ const getImageUrl = (url) => (url?.startsWith("http") ? url : `${backendUrl}${ur
                 <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <User className="w-6 h-6 text-white" />
-                      <h3 className="text-sm md:text-xl font-semibold text-white">
+
+                      <h3 className="text-sm md:text-xl text-white">
                         Progress Report for {selectedStudent.name}
                       </h3>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-white" />
+
                       <select
-                        value={selectedYear}
-                        onChange={handleYearChange}
+                        value={selectedTermYear}
+                        onChange={handleTermYearChange}
                         className="bg-white bg-opacity-20 text-dark border border-white border-opacity-30 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
                       >
-                        <option value={new Date().getFullYear().toString()}>
-                          {new Date().getFullYear()}
-                        </option>
-                        <option
-                          value={(new Date().getFullYear() - 1).toString()}
-                        >
-                          {new Date().getFullYear() - 1}
-                        </option>
-                        <option
-                          value={(new Date().getFullYear() - 2).toString()}
-                        >
-                          {new Date().getFullYear() - 2}
-                        </option>
+                        <option value="">All Terms</option>
+                        {availableTermYears.map((termYear, index) => (
+                          <option key={index} value={termYear.value}>
+                            {termYear.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -300,17 +352,12 @@ const getImageUrl = (url) => (url?.startsWith("http") ? url : `${backendUrl}${ur
                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                               Marks
                             </th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                              Term
-                            </th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
-                              Year
-                            </th>
+
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                          {studentProgress.length > 0 ? (
-                            studentProgress.map((record, index) => (
+                          {getFilteredProgress().length > 0 ? (
+                            getFilteredProgress().map((record, index) => (
                               <tr
                                 key={index}
                                 className="hover:bg-gray-50 transition-colors"
@@ -334,14 +381,7 @@ const getImageUrl = (url) => (url?.startsWith("http") ? url : `${backendUrl}${ur
                                   </span>
                                 </td>
 
-                                <td className="px-6 py-4">
-                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                                    {record.term}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 text-gray-900 font-medium">
-                                  {record.year}
-                                </td>
+
                               </tr>
                             ))
                           ) : (
@@ -355,7 +395,10 @@ const getImageUrl = (url) => (url?.startsWith("http") ? url : `${backendUrl}${ur
                                     <Search className="w-8 h-8 text-gray-400" />
                                   </div>
                                   <p className="text-gray-500">
-                                    No progress records found for this student.
+                                    {selectedTermYear
+                                      ? `No progress records found for ${selectedTermYear.split('-')[0]} ${selectedTermYear.split('-')[1]}`
+                                      : "No progress records found for this student."
+                                    }
                                   </p>
                                 </div>
                               </td>

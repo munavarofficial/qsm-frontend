@@ -1,25 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react"; // 👁️ icons
+import { Eye, EyeOff } from "lucide-react";
 
 function ManagementLoginPage() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [reg_No, setReg_No] = useState("");
+  const [number, setNumber] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // 👁️ toggle state
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  // Fetch CSRF token
+  // ✅ Fetch CSRF Token
   const fetchCSRFToken = async () => {
     try {
-      const csrfResponse = await fetch(
-        `${backendUrl}/api/authority/csrf-token/`,
-        { credentials: "include" }
-      );
+      const csrfResponse = await fetch(`${backendUrl}/api/authority/csrf-token/`, {
+        credentials: "include",
+      });
       const csrfData = await csrfResponse.json();
       return csrfData.csrfToken;
     } catch (error) {
@@ -28,6 +27,7 @@ function ManagementLoginPage() {
     }
   };
 
+  // ✅ Handle Login
   const handleLogin = async () => {
     if (loading) return;
     setLoading(true);
@@ -49,8 +49,8 @@ function ManagementLoginPage() {
           "X-CSRFToken": csrfToken,
         },
         body: JSON.stringify({
-          name: name.trim().toLowerCase(),
-          reg_no: reg_No.trim().toUpperCase(),
+          name: name.trim(),
+          number: number.trim(),
           password: password,
         }),
       });
@@ -63,11 +63,12 @@ function ManagementLoginPage() {
         return;
       }
 
+      // ✅ Store user data
       localStorage.setItem("management", JSON.stringify(data.management));
       setError("");
       navigate("/management-details");
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
@@ -107,17 +108,17 @@ function ManagementLoginPage() {
             />
           </div>
 
-          {/* Registration Number */}
+          {/* Number */}
           <div className="text-left">
-            <label htmlFor="regNo" className="block text-gray-700 text-sm mb-1">
-              Reg Number
+            <label htmlFor="number" className="block text-gray-700 text-sm mb-1">
+              Number
             </label>
             <input
-              id="regNo"
+              id="number"
               type="text"
-              value={reg_No}
-              onChange={(e) => setReg_No(e.target.value)}
-              placeholder="Enter Registration Number"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              placeholder="Enter your number"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
@@ -129,7 +130,7 @@ function ManagementLoginPage() {
             </label>
             <input
               id="password"
-              type={showPassword ? "text" : "password"} // 👁️ toggle type
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter Password"
@@ -144,7 +145,7 @@ function ManagementLoginPage() {
             </button>
           </div>
 
-          {/* Button with Loading State */}
+          {/* Button */}
           <button
             onClick={handleLogin}
             disabled={loading}
@@ -171,8 +172,10 @@ function ManagementLoginPage() {
                   <path
                     className="opacity-75"
                     fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0
-                    3.042 1.135 5.824 3 7.938l3-2.647z"
+                    d="M4 12a8 8 0 018-8V0C5.373
+                    0 0 5.373 0 12h4zm2 5.291A7.962
+                    7.962 0 014 12H0c0 3.042
+                    1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
                 Logging in...

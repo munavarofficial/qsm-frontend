@@ -44,7 +44,7 @@ function RouteenTopers() {
                 topers.map((student, index) => (
                   <tr key={index} className="border-b hover:bg-gray-100">
 
-                    <td className="p-3 text-sm sm:text-base">{student.name}</td>
+                    <td className="p-3 text-sm sm:text-base font-semibold">{student.name}</td>
                     <td className="p-3 text-sm sm:text-base">
                       {student.parent_name}
                     </td>
