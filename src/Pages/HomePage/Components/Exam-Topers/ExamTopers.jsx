@@ -64,7 +64,7 @@ function ExamTopers() {
                           key={i}
                           className="border-b hover:bg-gray-100 transition duration-200"
                         >
-                          <td className="p-2">{student.student_name}</td>
+                          <td className="p-2 font-medium">{student.student_name}</td>
                           <td className="p-2">{student.father_name}</td>
                           <td className="p-2 text-green-700 font-semibold">
                             {student.total_marks}
@@ -103,7 +103,7 @@ function ExamTopers() {
                           key={i}
                           className="border-b hover:bg-gray-100 transition duration-200"
                         >
-                          <td className="p-2 font-semibold">{student.student_name}</td>
+                          <td className="p-2 font-medium">{student.student_name}</td>
                           <td className="p-2">{student.father_name}</td>
                           <td className="p-2 text-green-700 font-semibold">
                             {student.total_marks}

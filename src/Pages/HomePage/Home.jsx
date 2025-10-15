@@ -288,131 +288,141 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-x-hidden">
+      {/* Sidebar Overlay (Mobile Only) */}
       {menuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998] lg:hidden"
           onClick={toggleMenu}
         />
       )}
 
-      <div className="flex">
+      <div className="flex relative">
         {/* Sidebar */}
-        <aside
-          className={`mb-4 fixed top-0 left-0 h-full lg:w-[20rem] w-[16rem] py-3 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white transform transition-transform duration-300 ease-in-out z-50 ${
-            menuOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 shadow-2xl`}
-        >
-          {/* Sidebar Header */}
-          <div className="px-3 md:p-4 border-b border-slate-700/50 ">
-            <div className="flex items-center justify-center mb-1">
-              <div className="">
-                <h1 className="mt-5 md:text-4xl text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Edusafa
-                </h1>
-              </div>
-            </div>
-            <p className="text-xs text-slate-300 text-center mb-3">
-              {schoolDetails.sub_name} <br />{" "}
-              <span className="text-xs md:text-sm text-slate-500">
-                Koduvally,Calicut, Kerala
-              </span>
-            </p>
-          </div>
+{/* Sidebar */}
+<aside
+  className={`fixed top-0 left-0 h-full lg:w-[20rem] w-[16rem] py-3
+  bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white
+  transform transition-transform duration-300 ease-in-out shadow-2xl
+  z-[9999] will-change-transform backface-hidden
+  ${menuOpen ? "translate-x-0" : "-translate-x-full"}
+  lg:translate-x-0 flex flex-col justify-between`}
+>
+  {/* Sidebar Header */}
+  <div>
+    <div className="px-3 md:p-4 border-b border-slate-700/50">
+      <div className="flex items-center justify-center mb-1">
+        <div>
+          <h1 className="mt-5 md:text-4xl text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Edusafa
+          </h1>
+        </div>
+      </div>
+      <p className="text-xs text-slate-300 text-center mb-3">
+        {schoolDetails.sub_name} <br />
+        <span className="text-xs md:text-sm text-slate-500">
+          Urulikkunnu, Calicut, Kerala
+        </span>
+      </p>
+    </div>
 
-          {/* Close Button */}
-          <button
-            className="absolute top-4 right-4 lg:hidden text-gray-400 hover:bg-white/10 rounded-full p-2 transition-colors"
-            onClick={toggleMenu}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+    {/* Close Button (Mobile) */}
+    <button
+      className="absolute top-4 right-4 lg:hidden text-gray-400 hover:bg-white/10 rounded-full p-2 transition-colors"
+      onClick={toggleMenu}
+    >
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
 
-          {/* Navigation */}
-          <nav className="px-4 py-2 md:p-5 space-y-2 mt-3">
-            <Link
-              to="/about"
-              className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
-            >
-              <span className="mr-3 text-2xl">🏠</span>
-              <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-                About
-              </span>
-            </Link>
+    {/* Navigation */}
+    <nav className="px-4 py-2 md:p-5 space-y-2 mt-3">
+      <Link
+        to="/about"
+        className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+      >
+        <span className="mr-3 text-2xl">🏠</span>
+        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+          About
+        </span>
+      </Link>
 
-            <button
-              onClick={handleTeacherClick}
-              className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-            >
-              <span className="mr-3 text-2xl">👨‍🏫</span>
-              <span className=" text-sm font-medium group-hover:translate-x-1 transition-transform">
-                Teachers
-              </span>
-            </button>
+      <button
+        onClick={handleTeacherClick}
+        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
+      >
+        <span className="mr-3 text-2xl">👨‍🏫</span>
+        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+          Teachers
+        </span>
+      </button>
 
-            <button
-              onClick={handleStudentClick}
-              className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-            >
-              <span className="mr-3 text-2xl">👨‍👩‍👧‍👦</span>
-              <span className=" text-sm font-medium group-hover:translate-x-1 transition-transform">
-                Parents
-              </span>
-            </button>
+      <button
+        onClick={handleStudentClick}
+        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
+      >
+        <span className="mr-3 text-2xl">👨‍👩‍👧‍👦</span>
+        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+          Parents
+        </span>
+      </button>
 
-            <button
-              onClick={handlePrincipalClick}
-              className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-            >
-              <span className="mr-3 text-2xl">🏛️</span>
-              <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-                Principal
-              </span>
-            </button>
+      <button
+        onClick={handlePrincipalClick}
+        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
+      >
+        <span className="mr-3 text-2xl">🏛️</span>
+        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+          Principal
+        </span>
+      </button>
 
-            <button
-              onClick={handleAuthorityClick}
-              className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-            >
-              <span className="mr-3 text-2xl">🏢</span>
-              <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-                Management
-              </span>
-            </button>
+      <button
+        onClick={handleAuthorityClick}
+        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
+      >
+        <span className="mr-3 text-2xl">🏢</span>
+        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+          Management
+        </span>
+      </button>
 
-            <Link
-              to="/support"
-              className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
-            >
-              <span className="mr-3 text-2xl">🛠️</span>
-              <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-                Support
-              </span>
-            </Link>
-            <div className="mt-5 text-center">
-              <a
-                href="https://www.aionespark.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent no-underline hover:text-blue-600 transition-colors duration-300 text-sm"
-              >
-                Powered by <br />
-                <span className="font-semibold">AioneSpark TechHive LLP</span>
-              </a>
-            </div>
-          </nav>
-        </aside>
+      <Link
+        to="/support"
+        className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+      >
+        <span className="mr-3 text-2xl">🛠️</span>
+        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+          Support
+        </span>
+      </Link>
+    </nav>
+  </div>
+
+  {/* Bottom Footer */}
+  <div className="p-4 border-t border-slate-700/50 text-center">
+    <a
+      href="https://www.aionespark.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="font-medium bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent no-underline hover:text-blue-600 transition-colors duration-300 text-sm"
+    >
+      Powered by <br />
+      <span className="font-semibold mt-5">AioneSpark TechHive LLP</span>
+    </a>
+  </div>
+</aside>
+
 
         {/* Main Content */}
         <div className="flex-1 lg:ml-80 overflow-x-hidden">
@@ -459,7 +469,7 @@ function Home() {
             {/* Stats Cards */}
             <div
               className="
-    grid gap-6 mb-6
+    grid gap-2 mb-2
     grid-flow-col auto-cols-[250px] overflow-x-auto no-scrollbar p-1
     md:grid-flow-row md:auto-cols-auto md:grid-cols-3 md:overflow-visible md:p-0
   "
@@ -510,9 +520,7 @@ function Home() {
                       Upcoming Events
                     </p>
                     <p className="text-2xl md:text-3xl font-bold text-purple-600">
-                      {Notice.events_count
-                        ? `0${Notice.events_count }`
-                        : "00"}
+                      {Notice.events_count ? `0${Notice.events_count}` : "00"}
                     </p>
                   </div>
                   <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-3 rounded-2xl">
