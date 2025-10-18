@@ -120,7 +120,6 @@ function SchoolDetails() {
               <h2 className="text-base md:text-3xl font-bold text-gray-300 mb-2 opacity-80">
                 {SchoolDetails.sub_name}
               </h2>
-              <div className="absolute right-0 top-0 w-0.5 h-8 bg-cyan-400 animate-pulse"></div>
             </div>
           </div>
 

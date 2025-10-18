@@ -7,12 +7,11 @@ import Calandar from "./Components/Calandar/Calandar";
 import Events from "./Components/UpcomingEvents/Events";
 import AttendancePie from "./Components/Atnd-summery/AttendancePie";
 import ClassWiseAtndPie from "./Components/Atnd-Class-waise/ClassWiseAtndPie";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import RouteenTopers from "./Components/Routine-Toperse/RouteenTopers";
 
 function Home() {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [schoolDetails, setSchoolDetails] = useState({});
   const [studetsCount, setStudentsCount] = useState("");
@@ -77,25 +76,7 @@ function Home() {
     fetchStudentsCount,
   ]);
 
-  const handlePrincipalClick = () => {
-    const principalToken = localStorage.getItem("principal");
-    navigate(principalToken ? "/principalpage" : "/principal-login");
-  };
 
-  const handleAuthorityClick = () => {
-    const authorityToken = localStorage.getItem("management");
-    navigate(authorityToken ? "/management-details" : "/management-login");
-  };
-
-  const handleStudentClick = () => {
-    const studentToken = localStorage.getItem("student");
-    navigate(studentToken ? "/studentspage" : "/studentlogin");
-  };
-
-  const handleTeacherClick = () => {
-    const teacherToken = localStorage.getItem("teacher");
-    navigate(teacherToken ? "/teacherspage" : "/teacherlogin");
-  };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -320,7 +301,7 @@ function Home() {
       <p className="text-xs text-slate-300 text-center mb-3">
         {schoolDetails.sub_name} <br />
         <span className="text-xs md:text-sm text-slate-500">
-          Urulikkunnu, Calicut, Kerala
+          Busthanabad, Calicut, Kerala
         </span>
       </p>
     </div>
@@ -346,67 +327,68 @@ function Home() {
     </button>
 
     {/* Navigation */}
-    <nav className="px-4 py-2 md:p-5 space-y-2 mt-3">
-      <Link
-        to="/about"
-        className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
-      >
-        <span className="mr-3 text-2xl">🏠</span>
-        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-          About
-        </span>
-      </Link>
+{/* Navigation */}
+<nav className="px-4 py-2 md:p-5 space-y-2 mt-3">
+  <Link
+    to="/about"
+    className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+  >
+    <span className="mr-3 text-2xl">🏠</span>
+    <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+      About
+    </span>
+  </Link>
 
-      <button
-        onClick={handleTeacherClick}
-        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-      >
-        <span className="mr-3 text-2xl">👨‍🏫</span>
-        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-          Teachers
-        </span>
-      </button>
+  <Link
+    to={localStorage.getItem("teacher") ? "/teacherspage" : "/teacherlogin"}
+    className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+  >
+    <span className="mr-3 text-2xl">👨‍🏫</span>
+    <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+      Teachers
+    </span>
+  </Link>
 
-      <button
-        onClick={handleStudentClick}
-        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-      >
-        <span className="mr-3 text-2xl">👨‍👩‍👧‍👦</span>
-        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-          Parents
-        </span>
-      </button>
+  <Link
+    to={localStorage.getItem("student") ?"/studentspage" : "/studentlogin"}
+    className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+  >
+    <span className="mr-3 text-2xl">👨‍👩‍👧‍👦</span>
+    <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+      Parents
+    </span>
+  </Link>
 
-      <button
-        onClick={handlePrincipalClick}
-        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-      >
-        <span className="mr-3 text-2xl">🏛️</span>
-        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-          Principal
-        </span>
-      </button>
+  <Link
+    to={localStorage.getItem("principal") ? "/principalpage" : "/principal-login"}
+    className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+  >
+    <span className="mr-3 text-2xl">🏛️</span>
+    <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+      Principal
+    </span>
+  </Link>
 
-      <button
-        onClick={handleAuthorityClick}
-        className="w-full flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group"
-      >
-        <span className="mr-3 text-2xl">🏢</span>
-        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-          Management
-        </span>
-      </button>
+  <Link
+    to={localStorage.getItem("management") ? "/management-details" : "/management-login"}
+    className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+  >
+    <span className="mr-3 text-2xl">🏢</span>
+    <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+      Management
+    </span>
+  </Link>
 
-      <Link
-        to="/support"
-        className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
-      >
-        <span className="mr-3 text-2xl">🛠️</span>
-        <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
-          Support
-        </span>
-      </Link>
-    </nav>
+  <Link
+    to="/support"
+    className="flex items-center p-2 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 rounded-xl transition-all duration-200 group no-underline"
+  >
+    <span className="mr-3 text-2xl">🛠️</span>
+    <span className="text-sm font-medium group-hover:translate-x-1 transition-transform">
+      Support
+    </span>
+  </Link>
+</nav>
   </div>
 
   {/* Bottom Footer */}
